@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { SignOutButton } from "@/app/components/auth/sign-out-button";
+import { ArrowRightIcon } from "@/app/components/ui/arrow-right-icon";
 import { AUTH_ENABLED } from "@/app/lib/auth-config";
 
 function getInitials(name?: string | null, email?: string | null) {
@@ -48,49 +49,44 @@ export default async function DashboardPage() {
                 Navigation
               </p>
               <h1 className="mt-2 text-[1.65rem] font-semibold tracking-tight sm:text-2xl">G-Row dashboard</h1>
-              <p className="mt-2 max-w-md text-sm leading-6 text-zinc-600">
-                Choose one of the rowing tools below.
-              </p>
             </div>
           )}
         </header>
 
-        <section className="grid gap-4 md:grid-cols-2 md:gap-6">
+        <section className="grid gap-4 md:grid-cols-2 md:gap-6 pl-2 pr-2">
           <Link
             href="/calculator"
-            className="group rounded-[1.75rem] bg-white px-5 py-6 shadow-sm ring-1 ring-zinc-200 transition hover:-translate-y-0.5 hover:shadow-md sm:px-8 sm:py-8"
+            className="group flex items-center justify-between gap-4 rounded-[1.75rem] bg-white px-5 py-6 shadow-sm ring-1 ring-zinc-200 transition hover:-translate-y-0.5 hover:shadow-md sm:px-8 sm:py-8"
           >
-            <p className="text-xs uppercase tracking-[0.24em] text-zinc-500 sm:text-sm">
-              Tool 01
-            </p>
-            <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:mt-4 sm:text-3xl">
-              2k percentage calculator
+            <h2 className="m-3 text-xl font-semibold tracking-tight sm:mt-4 sm:text-3xl">
+              Percentage Calculator
             </h2>
-            <p className="mt-3 max-w-md text-sm leading-6 text-zinc-600 sm:mt-4">
-              Compare a rowing 2k time against the current reference time and see
-              the resulting percentage immediately.
-            </p>
-            <span className="mt-6 inline-flex text-sm font-medium text-zinc-950 sm:mt-8">
-              Open calculator
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-zinc-950 text-white transition group-hover:translate-x-1">
+              <ArrowRightIcon className="h-5 w-5" />
             </span>
           </Link>
 
           <Link
             href="/records"
-            className="group rounded-[1.75rem] bg-zinc-950 px-5 py-6 text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:px-8 sm:py-8"
+            className="group flex items-center justify-between gap-4 rounded-[1.75rem] bg-zinc-950 px-5 py-6 text-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md sm:px-8 sm:py-8"
           >
-            <p className="text-xs uppercase tracking-[0.24em] text-zinc-400 sm:text-sm">
-              Tool 02
-            </p>
-            <h2 className="mt-3 text-2xl font-semibold tracking-tight sm:mt-4 sm:text-3xl">
-              Current rowing records
+            <h2 className="m-3 text-xl font-semibold tracking-tight sm:mt-4 sm:text-3xl">
+              Worldrecords
             </h2>
-            <p className="mt-3 max-w-md text-sm leading-6 text-zinc-300 sm:mt-4">
-              View the current 2k reference times and the average split for each
-              category on a dedicated records page.
-            </p>
-            <span className="mt-6 inline-flex text-sm font-medium text-white sm:mt-8">
-              Open records
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white/12 text-white transition group-hover:translate-x-1">
+              <ArrowRightIcon className="h-5 w-5" />
+            </span>
+          </Link>
+          
+          <Link
+            href="#"
+            className="group flex items-center justify-between gap-4 rounded-[1.75rem] bg-white px-5 py-6 shadow-sm ring-1 ring-zinc-200 transition hover:-translate-y-0.5 hover:shadow-md sm:px-8 sm:py-8"
+          >
+            <h2 className="m-3 text-xl font-semibold tracking-tight sm:mt-4 sm:text-3xl">
+              ...
+            </h2>
+            <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-zinc-950 text-white transition group-hover:translate-x-1">
+              <ArrowRightIcon className="h-5 w-5" />
             </span>
           </Link>
         </section>

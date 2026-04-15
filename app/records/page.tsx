@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { auth } from "@/auth";
 import RecordBrowser from "@/app/components/rowing/record-browser";
 import { SignOutButton } from "@/app/components/auth/sign-out-button";
+import { ArrowRightIcon } from "@/app/components/ui/arrow-right-icon";
 import { AUTH_ENABLED } from "@/app/lib/auth-config";
 
 export default async function RecordsPage() {
@@ -25,9 +26,10 @@ export default async function RecordsPage() {
           <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
             <Link
               href="/dashboard"
-              className="inline-flex h-12 w-full items-center justify-center rounded-full border border-zinc-300 px-5 text-sm font-medium text-zinc-900 transition hover:border-zinc-400 hover:bg-zinc-100 sm:h-11 sm:w-auto"
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full border border-zinc-300 px-5 text-sm font-medium text-zinc-900 transition hover:border-zinc-400 hover:bg-zinc-100 sm:h-11 sm:w-auto"
             >
               Back to dashboard
+              <ArrowRightIcon className="h-4 w-4" />
             </Link>
             {AUTH_ENABLED ? <SignOutButton /> : null}
           </div>

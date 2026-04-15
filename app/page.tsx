@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import { SignInButton } from "@/app/components/auth/sign-in-button";
+import { ArrowRightIcon } from "@/app/components/ui/arrow-right-icon";
 import { AUTH_ENABLED } from "@/app/lib/auth-config";
 
 export default async function Home() {
@@ -46,9 +47,10 @@ export default async function Home() {
           ) : (
             <Link
               href="/dashboard"
-              className="inline-flex h-12 w-full items-center justify-center rounded-full bg-zinc-950 px-5 text-sm font-medium text-white transition hover:bg-zinc-800"
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-zinc-950 px-5 text-sm font-medium text-white transition hover:bg-zinc-800"
             >
               Continue
+              <ArrowRightIcon className="h-4 w-4" />
             </Link>
           )}
             </div>

@@ -1,90 +1,92 @@
 export const GMS_TIMES_2024_2028 = [
   {
     "id": "m1x",
-    "time": 391.0,
-    "m/s": 5.1151
+    "gms_500": 89.6,
+    "gms_1000": 185.7,
+    "gms_2000": 391.0,
+    "gms_6000": 1092.8
   },
   {
     "id": "m2x",
-    "time": 360.0,
-    "m/s": 5.5556
+    "gms_500": 82.5,
+    "gms_1000": 171.0,
+    "gms_2000": 360.0,
+    "gms_6000": 1006.1
   },
   {
     "id": "m4x",
-    "time": 332.0,
-    "m/s": 6.0241
+    "gms_500": 76.1,
+    "gms_1000": 157.7,
+    "gms_2000": 332.0,
+    "gms_6000": 927.9
   },
   {
     "id": "m2-",
-    "time": 372.0,
-    "m/s": 5.3763
+    "gms_500": 85.3,
+    "gms_1000": 176.7,
+    "gms_2000": 372.0,
+    "gms_6000": 1039.7
   },
   {
     "id": "m4-",
-    "time": 339.0,
-    "m/s": 5.8997
+    "gms_500": 77.7,
+    "gms_1000": 161.0,
+    "gms_2000": 339.0,
+    "gms_6000": 947.5
   },
   {
     "id": "m8+",
-    "time": 319.0,
-    "m/s": 6.2696
+    "gms_500": 73.1,
+    "gms_1000": 151.5,
+    "gms_2000": 319.0,
+    "gms_6000": 891.6
   },
   {
     "id": "w1x",
-    "time": 428.0,
-    "m/s": 4.6729
+    "gms_500": 98.1,
+    "gms_1000": 203.3,
+    "gms_2000": 428.0,
+    "gms_6000": 1196.2
   },
   {
     "id": "w2x",
-    "time": 397.0,
-    "m/s": 5.0378
+    "gms_500": 91.0,
+    "gms_1000": 188.6,
+    "gms_2000": 397.0,
+    "gms_6000": 1109.6
   },
   {
     "id": "w4x",
-    "time": 366.0,
-    "m/s": 5.4645
+    "gms_500": 83.9,
+    "gms_1000": 173.9,
+    "gms_2000": 366.0,
+    "gms_6000": 1022.9
   },
   {
     "id": "w2-",
-    "time": 408.0,
-    "m/s": 4.902
+    "gms_500": 93.5,
+    "gms_1000": 193.8,
+    "gms_2000": 408.0,
+    "gms_6000": 1140.7
   },
   {
     "id": "w4-",
-    "time": 374.0,
-    "m/s": 5.3476
+    "gms_500": 85.7,
+    "gms_1000": 177.7,
+    "gms_2000": 374.0,
+    "gms_6000": 1045.3
   },
   {
     "id": "w8+",
-    "time": 353.0,
-    "m/s": 5.6657
-  },
-  {
-    "id": "pr1m1x",
-    "time": 530.0,
-    "m/s": 3.7736
-  },
-  {
-    "id": "pr1w1x",
-    "time": 587.0,
-    "m/s": 3.4072
-  },
-  {
-    "id": "pr2mix2x",
-    "time": 476.0,
-    "m/s": 4.2017
-  },
-  {
-    "id": "pr3mix2x",
-    "time": 427.0,
-    "m/s": 4.6838
-  },
-  {
-    "id": "pr3mix4+",
-    "time": 403.0,
-    "m/s": 4.9628
+    "gms_500": 80.9,
+    "gms_1000": 167.7,
+    "gms_2000": 353.0,
+    "gms_6000": 986.6
   }
-]
+] as const;
+
+export type GmsReference = (typeof GMS_TIMES_2024_2028)[number];
+export type GmsReferenceId = GmsReference["id"];
 
 export const ROWING_RECORDS = [
   {
@@ -353,12 +355,44 @@ export const ROWING_RECORDS = [
   }
 ] as const;
 
+const GMS_RECORD_ID_BY_ROWING_RECORD_ID = {
+  "men-1x-open": "m1x",
+  "men-2x-open": "m2x",
+  "men-4x-open": "m4x",
+  "men-2--open": "m2-",
+  "men-4--open": "m4-",
+  "men-8+-open": "m8+",
+  "women-1x-open": "w1x",
+  "women-2x-open": "w2x",
+  "women-4x-open": "w4x",
+  "women-2--open": "w2-",
+  "women-4--open": "w4-",
+  "women-8+-open": "w8+",
+} as const satisfies Partial<{ [key in RowingRecordId]: GmsReferenceId }>;
+
 export type RowingRecord = (typeof ROWING_RECORDS)[number];
 export type RowingRecordId = RowingRecord["id"];
 export type Record = RowingRecord;
 
 export function getRecordById(id: RowingRecordId) {
   return ROWING_RECORDS.find((entry) => entry.id === id) ?? null;
+}
+
+export function getGmsReferenceByRecordId(id: RowingRecordId) {
+  if (!(id in GMS_RECORD_ID_BY_ROWING_RECORD_ID)) {
+    return null;
+  }
+
+  const gmsReferenceId =
+    GMS_RECORD_ID_BY_ROWING_RECORD_ID[
+      id as keyof typeof GMS_RECORD_ID_BY_ROWING_RECORD_ID
+    ];
+
+  return GMS_TIMES_2024_2028.find((entry) => entry.id === gmsReferenceId) ?? null;
+}
+
+export function getGmsReferenceById(id: GmsReferenceId) {
+  return GMS_TIMES_2024_2028.find((entry) => entry.id === id) ?? null;
 }
 
 export function getSplitFromSeconds(seconds: number) {
