@@ -2,11 +2,16 @@
 
 import { useMemo, useState } from "react";
 
+import { DurationInputFields } from "./duration-input-fields";
+
 import {
   ROWING_RECORDS,
   getRecordById,
   type RowingRecordId,
 } from "@/app/lib/rowing-records";
+
+const DISTANCE_OPTIONS = [500, 1000, 2000, 6000] as const;
+type DistanceOption = (typeof DISTANCE_OPTIONS)[number];
 
 function parseTimeToSeconds(value: string) {
   const trimmed = value.trim();
@@ -15,7 +20,7 @@ function parseTimeToSeconds(value: string) {
     return null;
   }
 
-  const match = trimmed.match(/^(\d+):(\d{2})(?:\.(\d))?$/);
+  const match = trimmed.match(/^(\d+):(\d{2})(?:\.(\d{2}))$/);
 
   if (!match) {
     return null;
@@ -23,20 +28,20 @@ function parseTimeToSeconds(value: string) {
 
   const minutes = Number(match[1]);
   const seconds = Number(match[2]);
-  const tenths = Number(match[3] ?? 0);
+  const hundredths = Number(match[3]);
 
   if (seconds >= 60) {
     return null;
   }
 
-  return minutes * 60 + seconds + tenths / 10;
+  return minutes * 60 + seconds + hundredths / 100;
 }
 
 function formatSeconds(totalSeconds: number) {
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds - minutes * 60;
 
-  return `${minutes}:${seconds.toFixed(1).padStart(4, "0")}`;
+  return `${minutes}:${seconds.toFixed(2).padStart(5, "0")}`;
 }
 
 function formatPercent(value: number) {
@@ -45,8 +50,12 @@ function formatPercent(value: number) {
 
 export function TwoKCalculator() {
   const [recordId, setRecordId] = useState<RowingRecordId>(ROWING_RECORDS[0].id);
-  const [time, setTime] = useState("");
+  const [distance, setDistance] = useState<DistanceOption>(2000);
+  const [minutes, setMinutes] = useState("06");
+  const [seconds, setSeconds] = useState("40");
+  const [hundredths, setHundredths] = useState("20");
 
+  const time = `${minutes}:${seconds.padStart(2, "0")}.${hundredths.padStart(2, "0")}`;
   const record = getRecordById(recordId);
   const athleteSeconds = parseTimeToSeconds(time);
 
@@ -55,15 +64,17 @@ export function TwoKCalculator() {
       return null;
     }
 
-    const percentage = (record.seconds / athleteSeconds) * 100;
-    const gap = athleteSeconds - record.seconds;
+    const equivalentTwoKSeconds = athleteSeconds * (2000 / distance);
+    const percentage = (record.seconds / equivalentTwoKSeconds) * 100;
+    const gap = equivalentTwoKSeconds - record.seconds;
 
     return {
       percentage,
       gap,
-      split: athleteSeconds / 4,
+      split: athleteSeconds / (distance / 500),
+      equivalentTwoKSeconds,
     };
-  }, [athleteSeconds, record]);
+  }, [athleteSeconds, distance, record]);
 
   return (
     <div className="grid gap-4 lg:grid-cols-[1.05fr_0.95fr] lg:gap-6">
@@ -85,19 +96,30 @@ export function TwoKCalculator() {
           </label>
 
           <label className="grid gap-2">
-            <span className="text-sm font-medium text-zinc-700">Your 2k time</span>
-            <input
-              value={time}
-              onChange={(event) => setTime(event.target.value)}
-              placeholder="6:45.2"
-              inputMode="decimal"
-              className="h-14 rounded-2xl border border-zinc-200 bg-zinc-50 px-4 text-base text-zinc-950 outline-none transition focus:border-zinc-950"
-            />
+            <span className="text-sm font-medium text-zinc-700">Distance</span>
+            <select
+              value={distance}
+              onChange={(event) =>
+                setDistance(Number(event.target.value) as DistanceOption)
+              }
+              className="h-14 rounded-2xl border border-zinc-200 bg-zinc-50 px-4 text-sm text-zinc-950 outline-none transition focus:border-zinc-950"
+            >
+              {DISTANCE_OPTIONS.map((entry) => (
+                <option key={entry} value={entry}>
+                  {entry} m
+                </option>
+              ))}
+            </select>
           </label>
 
-          <div className="rounded-2xl border border-dashed border-zinc-200 bg-zinc-50 px-4 py-3 text-sm text-zinc-500">
-            Use the format mm:ss.t
-          </div>
+          <DurationInputFields
+            minutes={minutes}
+            seconds={seconds}
+            hundredths={hundredths}
+            onMinutesChange={setMinutes}
+            onSecondsChange={setSeconds}
+            onHundredthsChange={setHundredths}
+          />
         </div>
       </section>
 
@@ -120,13 +142,19 @@ export function TwoKCalculator() {
                 <p className="mt-1 text-lg font-medium">{record.time}</p>
               </div>
               <div>
+                <p className="text-sm text-zinc-400">Equivalent 2k time</p>
+                <p className="mt-1 text-lg font-medium">
+                  {formatSeconds(result.equivalentTwoKSeconds)}
+                </p>
+              </div>
+              <div>
                 <p className="text-sm text-zinc-400">Your split / 500m</p>
                 <p className="mt-1 text-lg font-medium">
                   {formatSeconds(result.split)}
                 </p>
               </div>
               <div>
-                <p className="text-sm text-zinc-400">Gap to record</p>
+                <p className="text-sm text-zinc-400">Gap to 2k record</p>
                 <p className="mt-1 text-lg font-medium">
                   {result.gap > 0 ? "+" : ""}
                   {formatSeconds(Math.abs(result.gap))}
@@ -140,7 +168,7 @@ export function TwoKCalculator() {
           </div>
         ) : (
           <div className="mt-6 text-sm text-zinc-300">
-            Enter a valid 2k time to calculate the percentage.
+            Enter a valid time to calculate the percentage.
           </div>
         )}
       </aside>

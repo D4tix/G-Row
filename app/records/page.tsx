@@ -18,10 +18,7 @@ export default async function RecordsPage() {
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-5 sm:gap-8">
         <header className="flex flex-col gap-4 rounded-[2rem] bg-white px-5 py-6 shadow-sm ring-1 ring-zinc-200 sm:flex-row sm:items-center sm:justify-between sm:px-8 sm:py-8">
           <div>
-            <p className="text-xs uppercase tracking-[0.24em] text-zinc-500 sm:text-sm">
-              Records
-            </p>
-            <h1 className="mt-2 text-[1.8rem] font-semibold tracking-tight sm:text-3xl">
+            <h1 className="mt-2 text-[1.6rem] font-semibold tracking-tight">
               Current 2k reference times.
             </h1>
           </div>

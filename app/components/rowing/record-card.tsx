@@ -48,15 +48,7 @@ export default function RecordCard({ record }: { record: Record }) {
                 </div>
 
                 <div>
-                    <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
-                        <p className="text-xs uppercase tracking-[0.22em] text-zinc-500">
-                            Holders
-                        </p>
-                        <p className="text-sm text-zinc-500">
-                            {athleteCount} {athleteCount === 1 ? "athlete" : "athletes"}
-                        </p>
-                    </div>
-                    <div className="mt-3 flex flex-wrap gap-2">
+                    <div className=" flex flex-wrap gap-2">
                         {record.holder.individuals.map((individual) => (
                             <span
                                 key={individual}

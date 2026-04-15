@@ -87,26 +87,6 @@ export default function RecordBrowser() {
     <div className="flex flex-col gap-4 sm:gap-6">
       <section className="rounded-[1.75rem] bg-white px-5 py-6 shadow-sm ring-1 ring-zinc-200 sm:px-6">
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between">
-            <div>
-              <p className="text-sm font-medium text-zinc-900">Filter records</p>
-              <p className="text-sm text-zinc-500">
-                {filteredRecords.length} {filteredRecords.length === 1 ? "record" : "records"}
-              </p>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                setDivision("all");
-                setEnvironment("all");
-                setWeight("all");
-              }}
-              className="self-start text-sm font-medium text-zinc-600 transition hover:text-zinc-950"
-            >
-              Reset filters
-            </button>
-          </div>
-
           <div className="grid gap-5 lg:grid-cols-3">
             <FilterGroup
               label="Division"
